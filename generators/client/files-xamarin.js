@@ -521,6 +521,16 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
+                    file: 'Project.Client.Xamarin.Android/Resources/drawable/menu.png',
+                    method: 'copy',
+                    renameTo: generator => `${generator.androidClientDir}/Resources/drawable/menu.png`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
                     file: 'Project.Client.Xamarin.Android/Resources/mipmap-anydpi-v26/icon.xml',
                     renameTo: generator => `${generator.androidClientDir}/Resources/mipmap-anydpi-v26/icon.xml`,
                 },
@@ -781,6 +791,26 @@ const files = {
                     file: 'Project.Client.Xamarin.iOS/Resources/Default-Portrait.png',
                     method: 'copy',
                     renameTo: generator => `${generator.iOSClientDir}/Resources/Default-Portrait.png`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Xamarin.iOS/Resources/menu.png',
+                    method: 'copy',
+                    renameTo: generator => `${generator.iOSClientDir}/Resources/menu.png`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Xamarin.iOS/Resources/splashscreen.png',
+                    method: 'copy',
+                    renameTo: generator => `${generator.iOSClientDir}/Resources/splashscreen.png`,
                 },
             ],
         },

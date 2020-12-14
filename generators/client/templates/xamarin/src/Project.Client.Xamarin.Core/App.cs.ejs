@@ -41,12 +41,13 @@ namespace <%= namespace %>.Client.Xamarin.Core
             httpClient.BaseAddress = new Uri(Configuration.BaseUri);
 
             var authenticationService = new AuthenticationService(httpClient, log);
-            var registerService = new RegisterService(httpClient, log);
-            var myEntityService = new AbstractEntityService<AbstractEntityModel>(httpClient, "api/myentities");
-
             Mvx.IoCProvider.RegisterSingleton<IAuthenticationService>(authenticationService);
+            var registerService = new RegisterService(httpClient, log);
             Mvx.IoCProvider.RegisterSingleton<IRegisterService>(registerService);
+            var myEntityService = new AbstractEntityService<AbstractEntityModel>(httpClient, "api/myentities");            
             Mvx.IoCProvider.RegisterSingleton<IAbstractEntityService<AbstractEntityModel>>(myEntityService);
+            // jhipster-needle-add-services-in-di - JHipster will add services in DI  
+
             Mvx.IoCProvider.RegisterSingleton<IMvxLog>(log);
             Mvx.IoCProvider.RegisterSingleton(httpClient);
 
