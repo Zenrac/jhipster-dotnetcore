@@ -34,7 +34,7 @@ const files = {
             templates: [
                 {
                     file: 'Project.Client/Models/Model.cs',
-                    renameTo: generator => `${generator.mainClientDir}/Models/${generator.asModel(generator.entityClass)}.cs`,
+                    renameTo: generator => `${generator.mainClientDir}/Models/Entities/${generator.asModel(generator.entityClass)}.cs`,
                 },
             ],
         },
@@ -43,7 +43,43 @@ const files = {
             templates: [
                 {
                     file: 'Project.Client/ViewModels/EntityViewModel.cs',
-                    renameTo: generator => `${generator.mainClientDir}/ViewModels/${generator.entityClass}ViewModel.cs`,
+                    renameTo: generator => `${generator.mainClientDir}/ViewModels/Entities/${generator.entityClass}ViewModel.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Services/EntityService.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Services/Entities/${generator.entityClass}/${generator.entityClass}Service.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Services/IEntityService.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Services/Entities/${generator.entityClass}/I${generator.entityClass}Service.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Views/EntityView.xaml.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Views/Entities/${generator.entityClass}/${generator.entityClass}View.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Views/EntityView.xaml',
+                    renameTo: generator => `${generator.mainClientDir}/Views/Entities/${generator.entityClass}/${generator.entityClass}View.xaml`,
                 },
             ],
         },
@@ -59,6 +95,7 @@ function writeFiles() {
     this.writeFilesToDisk(files, this, false, 'xamarin');
     const xamarinNeedle = new XamarinNeedle(this);
     xamarinNeedle.addEntityToMenu(this.entityClass);
-    xamarinNeedle.addServiceInDI(this.entityClass, this.asModel(this.entityClass));
-    
+    xamarinNeedle.addServiceInDI(this.entityClass);
+    xamarinNeedle.addCommandToMenu(this.entityClass);
+    xamarinNeedle.declareCommandToMenu(this.entityClass);
 }

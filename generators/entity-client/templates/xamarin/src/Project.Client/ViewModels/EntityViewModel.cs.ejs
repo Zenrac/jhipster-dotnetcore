@@ -45,7 +45,7 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
 {
     public class <%= entityClassName %>ViewModel : MvxViewModel
     {
-        private readonly IAbstractEntityService<<%= asModel(entityClassName) %>> _myEntityService;
+        private readonly I<%= entityClassName %>Service _myEntityService;
         private readonly IMvxNavigationService _navigationService;
 
         private <%= asModel(entityClassName) %> _currentElement;
@@ -113,7 +113,7 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
         <%_ } _%>
         
 
-        public <%= entityClassName %>ViewModel(IMvxNavigationService navigationService, IAbstractEntityService<<%= asModel(entityClassName) %>> myEntityService)
+        public <%= entityClassName %>ViewModel(IMvxNavigationService navigationService, I<%= entityClassName %>Service myEntityService)
         {
             _navigationService = navigationService;
             _myEntityService = myEntityService;
@@ -122,8 +122,13 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
         public async Task AddCommandClicked()
         {
             var entity = new <%= asModel(entityClassName) %>
-            {
-                Id = null,
+            {               
+                <%_ for (idx in fields){
+                    const fieldNamePascalized = fields[idx].fieldNamePascalized;
+                _%>
+                <%= fieldNamePascalized %> = <%= fieldNamePascalized %>,                  
+                <%_ } _%>
+                Id = null
             };
 
             await _myEntityService.CreateEntity(entity);

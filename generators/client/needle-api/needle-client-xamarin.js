@@ -32,7 +32,6 @@ module.exports = class extends needleBase {
     }
 
     addEntityToMenu(entityName) {
-        const lowerCasedEntityName = _.kebabCase(entityName);
         const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to menu.\n')}`;
         const entityMenuPath = `src/${this.mainClientDir}/Views/MenuPage.xaml`;
         const entityEntry =
@@ -41,7 +40,7 @@ module.exports = class extends needleBase {
                 `|<Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand" Padding="8" BackgroundColor="LightBlue" IsVisible="{Binding IsConnected}">
                 |                    <Label Text="${entityName}" />
                 |                    <Grid.GestureRecognizers>
-                |                       <TapGestureRecognizer Tapped="ToggleClicked" Command="{Binding ShowMyEntitiesCommand}" CommandParameter="${lowerCasedEntityName}"/>
+                |                       <TapGestureRecognizer Tapped="ToggleClicked" Command="{Binding Show${entityName}Command}"/>
                 |                    </Grid.GestureRecognizers>
                 |                </Grid>
                 |`);
@@ -51,15 +50,46 @@ module.exports = class extends needleBase {
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 
-    addServiceInDI(entityName, entityClassName) {
+    declareCommandToMenu(entityName) {
+        const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to menu.\n')}`;
+        const entityMenuPath = `src/${this.mainClientDir}/ViewModels/MenuViewModel.cs`;
+        const entityEntry =
+            // prettier-ignore
+            this.generator.stripMargin(
+                `|public IMvxCommand Show${entityName}Command => new MvxAsyncCommand(${entityName}CommandClicked);`);
+
+        const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-declare-entity-command', entityEntry);
+
+        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    }
+
+    addCommandToMenu(entityName) {
+        const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to menu.\n')}`;
+        const entityMenuPath = `src/${this.mainClientDir}/ViewModels/MenuViewModel.cs`;
+        const entityEntry =
+            // prettier-ignore
+            this.generator.stripMargin(
+                `|private async Task ${entityName}CommandClicked()
+                |        {
+                |            await _navigationService.Navigate<${entityName}ViewModel>();
+                |        }
+                `);
+
+        const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-entity-command', entityEntry);
+
+        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    }
+
+    addServiceInDI(entityName) {
         const lowerCasedEntityName = _.kebabCase(entityName);
+        const lowerEntityName = _.toLower(entityName);
         const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to Program.\n')}`;
         const programPath = `src/${this.mainClientDir}/App.cs`;
         const serviceEntry =
             // prettier-ignore
             this.generator.stripMargin(
-                `|var ${entityName}Service = new AbstractEntityService<${entityClassName}>(httpClient, "api/${lowerCasedEntityName}");                       
-                 |            Mvx.IoCProvider.RegisterSingleton<IAbstractEntityService<${entityClassName}>>(${entityName}Service);`);
+                `|var ${lowerEntityName}Service = new ${entityName}Service(httpClient);                       
+                 |            Mvx.IoCProvider.RegisterSingleton<I${entityName}Service>(${lowerEntityName}Service);`);
 
         const rewriteFileModel = this.generateFileModel(programPath, 'jhipster-needle-add-services-in-di', serviceEntry);
 

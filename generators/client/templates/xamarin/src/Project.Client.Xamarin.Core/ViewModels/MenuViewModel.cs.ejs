@@ -29,6 +29,7 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
         public IMvxCommand ShowWelcomeCommand => new MvxAsyncCommand(ShowWelcomeCommandClicked);
         public IMvxCommand SignIn => new MvxAsyncCommand(SignInClicked);
         public IMvxCommand SignUp => new MvxAsyncCommand(SignUpClicked);
+        // jhipster-needle-declare-entity-command - JHipster will declare commands
         public IMvxCommand SignOut => new MvxCommand(SignOutClicked);
         public bool IsConnected  => _authenticationService.IsAuthenticated;
 
@@ -37,6 +38,8 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
             _navigationService = navigationService;
             _authenticationService = authenticationService;          
         }
+
+        // jhipster-needle-add-entity-command - JHipster will add commands
 
         private async Task ShowMyEntitiesCommandClicked()
         {
