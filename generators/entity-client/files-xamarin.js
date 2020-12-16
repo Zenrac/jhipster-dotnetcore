@@ -20,7 +20,6 @@ const constants = require('../generator-dotnetcore-constants');
 
 /* Constants use throughout */
 const CLIENT_SRC_DIR = constants.CLIENT_SRC_DIR;
-const CLIENT_TEST_DIR = constants.CLIENT_TEST_DIR;
 const XamarinNeedle = require('../client/needle-api/needle-client-xamarin');
 
 /**
@@ -52,7 +51,8 @@ const files = {
             templates: [
                 {
                     file: 'Project.Client/Services/EntityService.cs',
-                    renameTo: generator => `${generator.mainClientDir}/Services/Entities/${generator.entityClass}/${generator.entityClass}Service.cs`,
+                    renameTo: generator =>
+                        `${generator.mainClientDir}/Services/Entities/${generator.entityClass}/${generator.entityClass}Service.cs`,
                 },
             ],
         },
@@ -61,7 +61,8 @@ const files = {
             templates: [
                 {
                     file: 'Project.Client/Services/IEntityService.cs',
-                    renameTo: generator => `${generator.mainClientDir}/Services/Entities/${generator.entityClass}/I${generator.entityClass}Service.cs`,
+                    renameTo: generator =>
+                        `${generator.mainClientDir}/Services/Entities/${generator.entityClass}/I${generator.entityClass}Service.cs`,
                 },
             ],
         },
@@ -70,7 +71,8 @@ const files = {
             templates: [
                 {
                     file: 'Project.Client/Views/EntityView.xaml.cs',
-                    renameTo: generator => `${generator.mainClientDir}/Views/Entities/${generator.entityClass}/${generator.entityClass}View.cs`,
+                    renameTo: generator =>
+                        `${generator.mainClientDir}/Views/Entities/${generator.entityClass}/${generator.entityClass}View.cs`,
                 },
             ],
         },
@@ -79,11 +81,12 @@ const files = {
             templates: [
                 {
                     file: 'Project.Client/Views/EntityView.xaml',
-                    renameTo: generator => `${generator.mainClientDir}/Views/Entities/${generator.entityClass}/${generator.entityClass}View.xaml`,
+                    renameTo: generator =>
+                        `${generator.mainClientDir}/Views/Entities/${generator.entityClass}/${generator.entityClass}View.xaml`,
                 },
             ],
         },
-    ]
+    ],
 };
 
 module.exports = {
