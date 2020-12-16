@@ -25,7 +25,6 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
         private readonly IMvxNavigationService _navigationService;
         private readonly IAuthenticationService _authenticationService;
 
-        public IMvxCommand ShowMyEntitiesCommand => new MvxAsyncCommand(ShowMyEntitiesCommandClicked);
         public IMvxCommand ShowWelcomeCommand => new MvxAsyncCommand(ShowWelcomeCommandClicked);
         public IMvxCommand SignIn => new MvxAsyncCommand(SignInClicked);
         public IMvxCommand SignUp => new MvxAsyncCommand(SignUpClicked);
@@ -40,11 +39,6 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
         }
 
         // jhipster-needle-add-entity-command - JHipster will add commands
-
-        private async Task ShowMyEntitiesCommandClicked()
-        {
-            await _navigationService.Navigate<MyEntityViewModel>();
-        }
 
         private async Task ShowWelcomeCommandClicked()
         {

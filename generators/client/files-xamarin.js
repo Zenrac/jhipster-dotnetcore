@@ -142,24 +142,6 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project.Client.Xamarin.Core/Views/MyEntityView.xaml.cs',
-                    renameTo: generator => `${generator.mainClientDir}/Views/MyEntityView.xaml.cs`,
-                },
-            ],
-        },
-        {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client.Xamarin.Core/Views/MyEntityView.xaml',
-                    renameTo: generator => `${generator.mainClientDir}/Views/MyEntityView.xaml`,
-                },
-            ],
-        },
-        {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
                     file: 'Project.Client.Xamarin.Core/Views/RegisterView.xaml.cs',
                     renameTo: generator => `${generator.mainClientDir}/Views/RegisterView.xaml.cs`,
                 },
@@ -227,15 +209,6 @@ const files = {
                 {
                     file: 'Project.Client.Xamarin.Core/ViewModels/MenuViewModel.cs',
                     renameTo: generator => `${generator.mainClientDir}/ViewModels/MenuViewModel.cs`,
-                },
-            ],
-        },
-        {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client.Xamarin.Core/ViewModels/MyEntityViewModel.cs',
-                    renameTo: generator => `${generator.mainClientDir}/ViewModels/MyEntityViewModel.cs`,
                 },
             ],
         },

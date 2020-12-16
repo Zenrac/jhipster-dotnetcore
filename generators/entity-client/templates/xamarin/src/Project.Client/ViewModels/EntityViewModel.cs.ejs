@@ -61,9 +61,10 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
             <%_ } _%>
         <%_ } _%>
 
-        public IMvxCommand AddCommand => new MvxAsyncCommand(AddCommandClicked);
-        public IMvxCommand RemoveCommand => new MvxAsyncCommand(RemoveCommandClicked);
-        public IMvxCommand EditCommand => new MvxAsyncCommand(EditCommandClicked);
+        // Workaround to fix MvvmCross issue where buttons remain disabled with MvxAsyncCommand
+        public IMvxCommand AddCommand => new MvxCommand(async () => await AddCommandClicked());
+        public IMvxCommand RemoveCommand => new MvxCommand(async () => await RemoveCommandClicked());
+        public IMvxCommand EditCommand => new MvxCommand(async () => await EditCommandClicked());
 
         public List<<%= asModel(entityClassName) %>> ListElement
         {
@@ -81,6 +82,14 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
             set
             {
                 _currentElement = value;
+                if (_currentElement != null)
+                {
+                    <%_ for (idx in fields){
+                        const fieldNamePascalized = fields[idx].fieldNamePascalized;
+                    _%>
+                    <%= fieldNamePascalized %> = _currentElement.<%= fieldNamePascalized %>;             
+                    <%_ } _%>
+                }
                 RaisePropertyChanged(() => CurrentElement);
             }
         }

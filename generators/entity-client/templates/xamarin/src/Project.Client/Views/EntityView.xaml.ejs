@@ -14,7 +14,7 @@ _%>
     <ContentPage.Content>
         <StackLayout>
             <Frame BackgroundColor="#2196F3" Padding="5" CornerRadius="0">
-                <Label Text="MyEntities Management" HorizontalOptions="Center" TextColor="White" FontSize="Title" />
+                <Label Text="<%= entityClassName %> Management" HorizontalOptions="Center" TextColor="White" FontSize="Title" />
             </Frame>
             <StackLayout Padding="10" VerticalOptions="CenterAndExpand">
                 <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Horizontal">
@@ -22,10 +22,24 @@ _%>
                     <Button Text="Supprimer" Command="{Binding RemoveCommand}" FontSize="16" />
                     <Button Text="Modifier" Command="{Binding EditCommand}" FontSize="16" />
                 </StackLayout>
-
-                <Entry Placeholder="Name" Text="{Binding Name}" />
-
-                <Entry Placeholder="Age" Keyboard="Numeric" Text="{Binding Age}" />
+                <%_ for (idx in fields){
+                    const fieldType = equivalentCSharpType(fields[idx].fieldType);
+                    const fieldNamePascalized = fields[idx].fieldNamePascalized;
+                    const fieldNameCamelCased = fields[idx].fieldNameCamelCased;_%>
+                <Label Text="<%= fieldNamePascalized %>" />
+                <%_    
+                if (fields[idx].fieldIsEnum) { _%>
+                <Entry Placeholder="<%= fieldNamePascalized %>" Text="{Binding <%= fieldNamePascalized %>}" />
+                <%_ } else if (fieldType === 'bool?') { _%>
+                <CheckBox IsChecked="{Binding <%= fieldNamePascalized %>}" />
+                <%_ } else if (fieldType === 'DateTime?') { _%>
+                <DatePicker Date="{Binding <%= fieldNamePascalized %>}" />
+                <%_ } else { _%>
+                <Entry Placeholder="<%= fieldNamePascalized %>" Text="{Binding <%= fieldNamePascalized %>}" Keyboard=<%_ if (
+                    fieldType === 'int?' || fieldType === 'double?' || fieldType === 'float?' || fieldType === 'long?' || fieldType === 'decimal?') { 
+                        _%> "Numeric" <%_ } else { _%> "Text" <%_ } _%> />
+                <%_ } _%>
+                <%_ } _%>
 
                 <Label Text="Entities" HorizontalOptions="StartAndExpand" FontSize="Title" />
                 <ListView BackgroundColor="LightGray" SelectedItem="{Binding CurrentElement}" x:Name="listView"
@@ -34,7 +48,7 @@ _%>
                         <DataTemplate>
                             <ViewCell>
                                 <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding Name}" />
+                                    <Label Text="{Binding Id}" />
                                 </StackLayout>
                             </ViewCell>
                         </DataTemplate>
