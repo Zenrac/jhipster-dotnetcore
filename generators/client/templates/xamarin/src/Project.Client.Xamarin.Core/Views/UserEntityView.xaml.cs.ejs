@@ -1,4 +1,4 @@
-﻿<%#
+<%#
  Copyright 2013-2020 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -13,18 +13,18 @@
  limitations under the License.
 -%>
 
-using System.Net.Http;
-using System.Threading.Tasks;
-using <%= namespace %>.Client.Xamarin.Core.Models;
+using <%= namespace %>.Client.Xamarin.Core.ViewModels;
+using MvvmCross.Forms.Presenters.Attributes;
+using MvvmCross.Forms.Views;
 
-namespace <%= namespace %>.Client.Xamarin.Core.Services
+namespace <%= namespace %>.Client.Xamarin.Core.Views
 {
-    public interface IAuthenticationService
+    [MvxMasterDetailPagePresentation(MasterDetailPosition.Detail, WrapInNavigationPage = true, NoHistory = true)]
+    public partial class UserEntityView : MvxContentPage<UserEntityViewModel>
     {
-        bool IsAuthenticated { get; set; }
-        UserModel CurrentUser { get; set; }
-        JwtToken JwtToken { get;}
-        Task<bool> SignIn(LoginModel model);
-        void SignOut();
+        public UserEntityView()
+        {
+            InitializeComponent();
+        }
     }
 }

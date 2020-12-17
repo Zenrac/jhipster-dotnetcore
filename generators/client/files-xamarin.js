@@ -160,6 +160,24 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
+                    file: 'Project.Client.Xamarin.Core/Views/UserEntityView.xaml.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Views/UserEntityView.xaml.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Xamarin.Core/Views/UserEntityView.xaml',
+                    renameTo: generator => `${generator.mainClientDir}/Views/UserEntityView.xaml`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
                     file: 'Project.Client.Xamarin.Core/Views/RegisterView.xaml.cs',
                     renameTo: generator => `${generator.mainClientDir}/Views/RegisterView.xaml.cs`,
                 },
@@ -252,6 +270,15 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
+                    file: 'Project.Client.Xamarin.Core/ViewModels/UserEntityViewModel.cs',
+                    renameTo: generator => `${generator.mainClientDir}/ViewModels/UserEntityViewModel.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
                     file: 'Project.Client.Xamarin.Core/ViewModels/WelcomeViewModel.cs',
                     renameTo: generator => `${generator.mainClientDir}/ViewModels/WelcomeViewModel.cs`,
                 },
@@ -321,7 +348,43 @@ const files = {
                     renameTo: generator => `${generator.mainClientDir}/Services/RegisterService.cs`,
                 },
             ],
-        }
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Xamarin.Core/Services/IUserEntityService.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Services/IUserEntityService.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Xamarin.Core/Services/UserEntityService.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Services/UserEntityService.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Xamarin.Core/Services/IUserService.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Services/IUserService.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Xamarin.Core/Services/UserService.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Services/UserService.cs`,
+                },
+            ],
+        },
     ],
     xamarinAppResources: [
         {
@@ -418,6 +481,44 @@ const files = {
                 },
             ],
         }
+    ],
+    xamarinAppTest: [
+        {
+            path: CLIENT_TEST_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Project.Client.Test.csproj',
+                    renameTo: generator => `${generator.clientTestProject}/${generator.pascalizedBaseName}.Client.Test.csproj`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_TEST_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Pages/TestPages/LoginTest.cs',
+                    renameTo: generator => `${generator.clientTestProject}/LoginTest.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_TEST_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Pages/TestPages/MyEntityViewModelTest.cs',
+                    renameTo: generator => `${generator.clientTestProject}/MyEntityViewModelTest.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_TEST_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Pages/TestPages/UserEntityViewModelTest.cs',
+                    renameTo: generator => `${generator.clientTestProject}/UserEntityViewModelTest.cs`,
+                },
+            ],
+        },
     ],
     xamarinAppAndroid: [
         {

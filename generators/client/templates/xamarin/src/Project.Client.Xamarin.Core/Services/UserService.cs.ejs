@@ -1,4 +1,4 @@
-﻿<%#
+<%#
  Copyright 2013-2020 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -13,18 +13,22 @@
  limitations under the License.
 -%>
 
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
-using <%= namespace %>.Client.Xamarin.Core.Models;
 
 namespace <%= namespace %>.Client.Xamarin.Core.Services
 {
-    public interface IAuthenticationService
+    public class UserService : UserEntityService, IUserService
     {
-        bool IsAuthenticated { get; set; }
-        UserModel CurrentUser { get; set; }
-        JwtToken JwtToken { get;}
-        Task<bool> SignIn(LoginModel model);
-        void SignOut();
+        public UserService(HttpClient httpClient, IAuthenticationService authenticationService) : base(httpClient, authenticationService)
+        {
+        }
+        public async Task<IEnumerable<string>> GetAllAuthorities()
+        {
+            return await _httpClient.GetFromJsonAsync<IEnumerable<string>>("/api/users/authorities");
+        }
+
     }
 }
