@@ -1,4 +1,4 @@
-﻿<%#
+<%#
  Copyright 2013-2020 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -14,24 +14,14 @@
 -%>
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using <%= namespace %>.Client.Models;
-using Microsoft.AspNetCore.Components.Authorization;
+using System.Text;
 
-namespace <%= namespace %>.Client.Services.EntityServices.User
+namespace <%= namespace %>.Client.Xamarin.Shared.Constants
 {
-    public class UserService : AbstractEntityService<UserModel>,IUserService
+    public static class RolesConstants
     {
-        public UserService(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider) : base(httpClient, authenticationStateProvider, "/api/users")
-        {
-        }
-
-        public async Task<IEnumerable<string>> GetAllAuthorities()
-        {
-            return await _httpClient.GetFromJsonAsync<IEnumerable<string>>($"{BaseUrl}/authorities");
-        }
+        public const string ADMIN = "ROLE_ADMIN";
+        public const string USER = "ROLE_USER";
+        public const string ANONYMOUS = "ROLE_ANONYMOUS";
     }
 }

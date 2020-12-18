@@ -13,7 +13,10 @@
  limitations under the License.
 -%>
 
+using <%= namespace %>.Client.Xamarin.Shared.Constants;
+using <%= namespace %>.Client.Xamarin.Core.Models;
 using <%= namespace %>.Client.Xamarin.Core.Services;
+using System.Linq;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using System.Threading.Tasks;
@@ -25,12 +28,17 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
         private readonly IMvxNavigationService _navigationService;
         private readonly IAuthenticationService _authenticationService;
 
+        public IMvxCommand ShowMyUsersCommand => new MvxAsyncCommand(ShowMyUsersCommandClicked);
+        public IMvxCommand ShowMyEntitiesCommand => new MvxAsyncCommand(ShowMyEntitiesCommandClicked);
         public IMvxCommand ShowWelcomeCommand => new MvxAsyncCommand(ShowWelcomeCommandClicked);
         public IMvxCommand SignIn => new MvxAsyncCommand(SignInClicked);
         public IMvxCommand SignUp => new MvxAsyncCommand(SignUpClicked);
         // jhipster-needle-declare-entity-command - JHipster will declare commands
         public IMvxCommand SignOut => new MvxCommand(SignOutClicked);
         public bool IsConnected  => _authenticationService.IsAuthenticated;
+        
+        public UserModel User => IsConnected ? _authenticationService.CurrentUser : null;
+        public bool IsAdmin => IsConnected && User != null && User.Authorities.Contains(RolesConstants.ADMIN);
 
         public MenuViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
         {
@@ -39,6 +47,16 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
         }
 
         // jhipster-needle-add-entity-command - JHipster will add commands
+
+        private async Task ShowMyEntitiesCommandClicked()
+        {
+            await _navigationService.Navigate<MyEntityViewModel>();
+        }
+
+        private async Task ShowMyUsersCommandClicked()
+        {
+            await _navigationService.Navigate<UserEntityViewModel>();
+        }
 
         private async Task ShowWelcomeCommandClicked()
         {

@@ -1,4 +1,4 @@
-﻿<%#
+<%#
  Copyright 2013-2020 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -12,26 +12,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using <%= namespace %>.Client.Models;
-using Microsoft.AspNetCore.Components.Authorization;
 
-namespace <%= namespace %>.Client.Services.EntityServices.User
+using <%= namespace %>.Client.Xamarin.Core.ViewModels;
+using MvvmCross.Forms.Presenters.Attributes;
+using MvvmCross.Forms.Views;
+
+namespace <%= namespace %>.Client.Xamarin.Core.Views
 {
-    public class UserService : AbstractEntityService<UserModel>,IUserService
+    [MvxMasterDetailPagePresentation(MasterDetailPosition.Detail, WrapInNavigationPage = true, NoHistory = true)]
+    public partial class UserEntityView : MvxContentPage<UserEntityViewModel>
     {
-        public UserService(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider) : base(httpClient, authenticationStateProvider, "/api/users")
+        public UserEntityView()
         {
-        }
-
-        public async Task<IEnumerable<string>> GetAllAuthorities()
-        {
-            return await _httpClient.GetFromJsonAsync<IEnumerable<string>>($"{BaseUrl}/authorities");
+            InitializeComponent();
         }
     }
 }
