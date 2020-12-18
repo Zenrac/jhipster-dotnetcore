@@ -29,9 +29,9 @@ namespace <%= namespace %>.Client.Test.Pages.TestPages
 
 {
     [TestClass]
-    public class MyEntityViewModelTest : MvxIoCSupportingTest
+    public class MyAbstractEntityViewModelTest : MvxIoCSupportingTest
     {
-        private readonly Mock<IAbstractEntityService> _mockMyEntityService = new Mock<IAbstractEntityService>();
+        private readonly Mock<IAbstractEntityService<AbstractEntityModel>> _mockMyEntityService = new Mock<IAbstractEntityService<AbstractEntityModel>>();
         private readonly List<AbstractEntityModel> _myEntities = new List<AbstractEntityModel>();
         private readonly Fixture _fixture = new Fixture();
 
@@ -45,7 +45,7 @@ namespace <%= namespace %>.Client.Test.Pages.TestPages
             base.Setup(); // from MvxIoCSupportingTest 
 
             Ioc.RegisterSingleton<IMvxNavigationService>(mockNavService.Object);
-            Ioc.RegisterSingleton<IAbstractEntityService>(_mockMyEntityService.Object);
+            Ioc.RegisterSingleton<IAbstractEntityService<AbstractEntityModel>>(_mockMyEntityService.Object);
 
             _myEntityViewModel = new MyEntityViewModel(mockNavService.Object, _mockMyEntityService.Object);
             await _myEntityViewModel.Initialize();
