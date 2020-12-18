@@ -9,7 +9,7 @@
     "prodDatabaseType": "mysql",
     "enableTranslation": false,
     "namespace": "JhipsterSampleApplication",
-    "jhipsterVersion": "6.9.1",
+    "jhipsterVersion": "6.10.5",
     "useSass": true,
     "clientPackageManager": "npm",
     "clientFramework": "angularX",
@@ -21,13 +21,13 @@
     "otherModules": [
       {
         "name": "generator-jhipster-dotnetcore",
-        "version": "2.0.0"
+        "version": "2.0.1"
       }
     ],
     "blueprints": [
       {
         "name": "generator-jhipster-dotnetcore",
-        "version": "2.0.0"
+        "version": "2.0.1"
       }
     ]
   }
