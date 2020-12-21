@@ -52,8 +52,6 @@ namespace <%= namespace %>.Client.Xamarin.Core
             Mvx.IoCProvider.RegisterSingleton<IAuthenticationService>(authenticationService);
             var registerService = new RegisterService(httpClient, log);
             Mvx.IoCProvider.RegisterSingleton<IRegisterService>(registerService);
-            var myEntityService = new AbstractEntityService<AbstractEntityModel>(httpClient, "api/myentities");            
-            Mvx.IoCProvider.RegisterSingleton<IAbstractEntityService<AbstractEntityModel>>(myEntityService);
             var userEntityService = new UserEntityService(httpClient, authenticationService);
             Mvx.IoCProvider.RegisterSingleton<IUserEntityService<UserModel>>(userEntityService);
 
