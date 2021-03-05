@@ -1,4 +1,4 @@
-﻿<%#
+<%#
  Copyright 2013-2020 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -13,17 +13,19 @@
  limitations under the License.
 -%>
 
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using <%= namespace %>.Client.Xamarin.Core.Models;
 
 namespace <%= namespace %>.Client.Xamarin.Core.Services
 {
-    public interface IAuthenticationService
+    public interface IUserEntityService<T> where T : UserModel
     {
-        bool IsAuthenticated { get; set; }
-        UserModel CurrentUser { get; set; }
-        Task<bool> SignIn(LoginModel model);
-        void SignOut();
+        Task<IList<UserModel>> GetAll();
+        Task<UserModel> Get(string id);
+        Task Add(UserModel _model);
+        Task Update(UserModel model);
+        Task Delete(string id);
     }
 }

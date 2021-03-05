@@ -52,6 +52,9 @@ namespace <%= namespace %>.Client.Xamarin.Core
             Mvx.IoCProvider.RegisterSingleton<IAuthenticationService>(authenticationService);
             var registerService = new RegisterService(httpClient, log);
             Mvx.IoCProvider.RegisterSingleton<IRegisterService>(registerService);
+            var userEntityService = new UserEntityService(httpClient, authenticationService);
+            Mvx.IoCProvider.RegisterSingleton<IUserEntityService<UserModel>>(userEntityService);
+
             // jhipster-needle-add-services-in-di - JHipster will add services in DI  
 
             Mvx.IoCProvider.RegisterSingleton<IMvxLog>(log);

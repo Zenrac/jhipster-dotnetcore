@@ -12,18 +12,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
-using System.Net.Http;
-using System.Threading.Tasks;
-using <%= namespace %>.Client.Xamarin.Core.Models;
-
-namespace <%= namespace %>.Client.Xamarin.Core.Services
+namespace <%= namespace %>.Client.Test.Helpers
 {
-    public interface IAuthenticationService
+    public class TestPolicyRequirement : IAuthorizationRequirement
     {
-        bool IsAuthenticated { get; set; }
-        UserModel CurrentUser { get; set; }
-        Task<bool> SignIn(LoginModel model);
-        void SignOut();
+        public string PolicyName { get; set; }
     }
 }

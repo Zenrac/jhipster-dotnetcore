@@ -1,4 +1,4 @@
-﻿<%#
+<%#
  Copyright 2013-2020 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -12,18 +12,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-using System.Net.Http;
-using System.Threading.Tasks;
-using <%= namespace %>.Client.Xamarin.Core.Models;
-
-namespace <%= namespace %>.Client.Xamarin.Core.Services
+namespace <%= namespace %>.Client.Xamarin.Shared.Constants
 {
-    public interface IAuthenticationService
+    public static class RolesConstants
     {
-        bool IsAuthenticated { get; set; }
-        UserModel CurrentUser { get; set; }
-        Task<bool> SignIn(LoginModel model);
-        void SignOut();
+        public const string ADMIN = "ROLE_ADMIN";
+        public const string USER = "ROLE_USER";
+        public const string ANONYMOUS = "ROLE_ANONYMOUS";
     }
 }
