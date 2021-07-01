@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -28,6 +28,7 @@ const PROJECT_DTO_SUFFIX = constants.PROJECT_DTO_SUFFIX;
 const PROJECT_CROSSCUTTING_SUFFIX = constants.PROJECT_CROSSCUTTING_SUFFIX;
 const PROJECT_INFRASTRUCTURE_SUFFIX = constants.PROJECT_INFRASTRUCTURE_SUFFIX;
 const PROJECT_SERVICE_SUFFIX = constants.PROJECT_SERVICE_SUFFIX;
+const TERRAFORM_DIR = constants.TERRAFORM_DIR;
 
 const serverFiles = {
     serverCsProj: [
@@ -376,11 +377,6 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project.Infrastructure/Data/Extensions/DbContextExtensions.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/DbContextExtensions.cs`,
-                },
-                {
                     file: 'Project.Infrastructure/Data/Extensions/DbSetExtensions.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/DbSetExtensions.cs`,
@@ -424,9 +420,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project.Infrastructure/Configuration/JHipsterSettings.cs',
+                    file: 'Project.Infrastructure/Configuration/SecuritySettings.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/JHipsterSettings.cs`,
+                        `${generator.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/SecuritySettings.cs`,
                 },
             ],
         },
@@ -508,8 +504,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Configuration/NhipsterStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Configuration/NhipsterStartup.cs`,
+                    file: 'Project/Configuration/AppSettingsStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/AppSettingsStartup.cs`,
                 },
             ],
         },
@@ -684,8 +680,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Controllers/UserController.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Controllers/UserController.cs`,
+                    file: 'Project/Controllers/UsersController.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/UsersController.cs`,
                 },
             ],
         },
@@ -714,8 +710,8 @@ const serverFiles = {
             path: SERVER_TEST_DIR,
             templates: [
                 {
-                    file: 'Project.Test/Controllers/UserResourceIntTest.cs',
-                    renameTo: generator => `${generator.testProjectDir}/Controllers/UserResourceIntTest.cs`,
+                    file: 'Project.Test/Controllers/UsersResourceIntTest.cs',
+                    renameTo: generator => `${generator.testProjectDir}/Controllers/UsersResourceIntTest.cs`,
                 },
             ],
         },
@@ -989,8 +985,8 @@ const serverFiles = {
             path: SERVER_TEST_DIR,
             templates: [
                 {
-                    file: 'Project.Test/Setup/NhipsterWebApplicationFactory.cs',
-                    renameTo: generator => `${generator.testProjectDir}/Setup/NhipsterWebApplicationFactory.cs`,
+                    file: 'Project.Test/Setup/AppWebApplicationFactory.cs',
+                    renameTo: generator => `${generator.testProjectDir}/Setup/AppWebApplicationFactory.cs`,
                 },
             ],
         },
@@ -1133,6 +1129,13 @@ const serverFiles = {
             ],
         },
     ],
+    terraform: [
+        {
+            condition: generator => generator.withTerraformAzureScripts,
+            path: TERRAFORM_DIR,
+            templates: ['main.tf', 'variables.tf', 'outputs.tf'],
+        },
+    ],
 };
 
 const gatlingTestsFiles = {
@@ -1177,6 +1180,13 @@ function writeFiles() {
         },
         writeFilesBaseServiceDiscovery() {
             this.writeFilesToDisk(baseServiceDiscoveryFiles, this, false, this.fetchFromInstalledJHipster('server/templates/src/main'));
+        },
+        writeDirectoryTargetsFile() {
+            this.fs.copyTpl(
+                this.templatePath(`dotnetcore/${constants.SERVER_SRC_DIR}/Directory.Build.targets`),
+                this.destinationPath('Directory.Build.targets'),
+                this
+            );
         },
     };
 }

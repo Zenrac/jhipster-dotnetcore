@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,8 +17,15 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const path = require('path');
 const _ = require('lodash');
+
+const getFieldNameUndercored = fields =>
+    ['id'].concat(
+        fields.map(field => {
+            return _.snakeCase(field.fieldName);
+        })
+    );
+const path = require('path');
 const jhiCore = require('jhipster-core');
 const shelljs = require('shelljs');
 
@@ -99,7 +106,7 @@ function askForMicroserviceJson() {
 function askForUpdate() {
     const context = this.context;
     // ask only if running an existing entity without arg option --force or --regenerate
-    const isForce = context.options.force || context.regenerate;
+    const isForce = this.options.force || context.regenerate;
     context.updateEntity = 'regenerate'; // default if skipping questions by --force
     if (isForce || !context.useConfigurationFile) {
         return;
@@ -183,10 +190,10 @@ function askForFieldsToRemove() {
     this.prompt(prompts).then(props => {
         if (props.confirmRemove) {
             this.log(chalk.red(`\nRemoving fields: ${props.fieldsToRemove}\n`));
-            for (let i = context.fields.length - 1; i >= 0; i -= 1) {
-                const field = context.fields[i];
+            for (let i = this.entityConfig.fields.length - 1; i >= 0; i -= 1) {
+                const field = this.entityConfig.fields[i];
                 if (props.fieldsToRemove.filter(val => val === field.fieldName).length > 0) {
-                    context.fields.splice(i, 1);
+                    this.entityConfig.fields.splice(i, 1);
                 }
             }
         }
@@ -239,10 +246,10 @@ function askForRelationsToRemove() {
     this.prompt(prompts).then(props => {
         if (props.confirmRemove) {
             this.log(chalk.red(`\nRemoving relationships: ${props.relsToRemove}\n`));
-            for (let i = context.relationships.length - 1; i >= 0; i -= 1) {
-                const rel = context.relationships[i];
+            for (let i = this.entityConfig.relationships.length - 1; i >= 0; i -= 1) {
+                const rel = this.entityConfig.relationships[i];
                 if (props.relsToRemove.filter(val => val === `${rel.relationshipName}:${rel.relationshipType}`).length > 0) {
-                    context.relationships.splice(i, 1);
+                    this.entityConfig.relationships.splice(i, 1);
                 }
             }
         }
@@ -258,8 +265,8 @@ function askForTableName() {
     const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
     if (
         skipCheckLengthOfIdentifier ||
-        !context.relationships ||
-        context.relationships.length === 0 ||
+        !this.entityConfig.relationships ||
+        this.entityConfig.relationships.length === 0 ||
         entityTableName.length <= 30
         /* (prodDatabaseType === 'oracle' && entityTableName.length > 14) || */
     ) {
@@ -301,7 +308,7 @@ function askForTableName() {
 /* function askForFiltering() {
     const context = this.context;
     // don't prompt if server is skipped, or the backend is not sql, or no service requested
-    if (context.useConfigurationFile || context.skipServer || context.databaseType !== 'sql' || context.service === 'no') {
+    if (context.useConfigurationFile || context.skipServer || context.databaseType !== 'sql' || this.entityConfig.service === 'no') {
         return;
     }
     const done = this.async();
@@ -332,7 +339,7 @@ function askForTableName() {
 function askForDTO() {
     const context = this.context;
     // don't prompt if data is imported from a file or server is skipped or if no service layer
-    if (context.useConfigurationFile || context.skipServer || context.service === 'no') {
+    if (context.useConfigurationFile || context.skipServer || this.entityConfig.service === 'no') {
         context.dto = context.dto || 'no';
         return;
     }
@@ -356,7 +363,7 @@ function askForDTO() {
         },
     ];
     this.prompt(prompts).then(props => {
-        context.dto = props.dto;
+        this.entityConfig.dto = props.dto;
         done();
     });
 }
@@ -387,7 +394,7 @@ function askForService() {
         },
     ];
     this.prompt(prompts).then(props => {
-        context.service = props.service;
+        this.entityConfig.service = props.service;
         done();
     });
 }
@@ -425,7 +432,7 @@ function askForPagination() {
         },
     ];
     this.prompt(prompts).then(props => {
-        context.pagination = props.pagination;
+        this.entityConfig.pagination = props.pagination;
         this.log(chalk.green('\nEverything is configured, generating the entity...\n'));
         done();
     });
@@ -436,12 +443,11 @@ function askForPagination() {
  */
 function askForField(done) {
     const context = this.context;
-    this.log(chalk.green(`\nGenerating field #${context.fields.length + 1}\n`));
+    this.log(chalk.green(`\nGenerating field #${this.entityConfig.fields.length + 1}\n`));
     // const skipServer = context.skipServer;
     const prodDatabaseType = context.prodDatabaseType;
     // const databaseType = context.databaseType;
     const clientFramework = context.clientFramework;
-    const fieldNamesUnderscored = context.fieldNamesUnderscored;
     const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
     const prompts = [
         {
@@ -464,7 +470,7 @@ function askForField(done) {
                 if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                     return 'Your field name cannot start with an upper case letter';
                 }
-                if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
+                if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(_.snakeCase(input))) {
                     return 'Your field name cannot use an already existing field name';
                 }
                 if ((clientFramework === undefined || clientFramework === 'angularX') && jhiCore.isReservedFieldName(input, 'angularX')) {
@@ -865,8 +871,7 @@ function askForField(done) {
                 fieldValidateRulesMaxbytes: props.fieldValidateRulesMaxbytes */,
             };
 
-            fieldNamesUnderscored.push(_.snakeCase(props.fieldName));
-            context.fields.push(field);
+            this.entityConfig.fields = this.entityConfig.fields.concat(field);
         }
         logFieldsAndRelationships.call(this);
         if (props.fieldAdd) {
@@ -884,7 +889,6 @@ function askForRelationship(done) {
     const context = this.context;
     const name = context.name;
     this.log(chalk.green('\nGenerating relationships to other entities\n'));
-    const fieldNamesUnderscored = context.fieldNamesUnderscored;
     const prompts = [
         {
             type: 'confirm',
@@ -927,7 +931,7 @@ function askForRelationship(done) {
                 if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                     return 'Your relationship cannot start with an upper case letter';
                 }
-                if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
+                if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(_.snakeCase(input))) {
                     return 'Your relationship cannot use an already existing field name';
                 }
                 if (jhiCore.isReservedKeyword(input, 'JAVA')) {
@@ -1058,9 +1062,7 @@ function askForRelationship(done) {
                 relationship.otherEntityField = 'login';
                 relationship.otherEntityRelationshipName = _.lowerFirst(name);
             }
-
-            fieldNamesUnderscored.push(_.snakeCase(props.relationshipName));
-            context.relationships.push(relationship);
+            this.entityConfig.relationships = this.entityConfig.relationships.concat(relationship);
         }
         logFieldsAndRelationships.call(this);
         if (props.relationshipAdd) {
@@ -1077,12 +1079,12 @@ function askForRelationship(done) {
  */
 function logFieldsAndRelationships() {
     const context = this.context;
-    if (context.fields.length > 0 || context.relationships.length > 0) {
-        this.log(chalk.red(chalk.white('\n================= ') + context.entityNameCapitalized + chalk.white(' =================')));
+    if (this.entityConfig.fields.length > 0 || this.entityConfig.relationships.length > 0) {
+        this.log(chalk.red(chalk.white('\n================= ') + context.name + chalk.white(' =================')));
     }
-    if (context.fields.length > 0) {
+    if (this.entityConfig.fields.length > 0) {
         this.log(chalk.white('Fields'));
-        context.fields.forEach(field => {
+        this.entityConfig.fields.forEach(field => {
             const validationDetails = [];
             const fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
             if (fieldValidate === true) {
@@ -1122,9 +1124,9 @@ function logFieldsAndRelationships() {
         });
         this.log();
     }
-    if (context.relationships.length > 0) {
+    if (this.entityConfig.relationships.length > 0) {
         this.log(chalk.white('Relationships'));
-        context.relationships.forEach(relationship => {
+        this.entityConfig.relationships.forEach(relationship => {
             // const validationDetails = [];
             /* if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
                 validationDetails.push('required');
